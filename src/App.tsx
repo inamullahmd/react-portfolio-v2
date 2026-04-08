@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import CustomCursor from "./components/ui/CustomCursor";
-import Home from "./pages/Home";
 import AboutMe from "./pages/AboutMe";
+import Home from "./pages/Home";
 
 export default function App() {
   const [isDark, setIsDark] = useState(true);
@@ -21,7 +21,6 @@ export default function App() {
       }
     >
       <CustomCursor isDark={isDark} />
-
       <Navbar isDark={isDark} toggleTheme={toggleTheme} />
 
       <Routes>

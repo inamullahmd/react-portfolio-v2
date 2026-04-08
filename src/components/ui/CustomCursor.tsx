@@ -69,13 +69,13 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
         style={{
           x: ringX,
           y: ringY,
-          width: 28,
-          height: 28,
+          width: 24,
+          height: 24,
           translateX: "-50%",
           translateY: "-50%",
         }}
         animate={{
-          scale: isHovering ? 2 : 1,
+          scale: isHovering ? 1.7 : 1,
           opacity: isVisible ? 1 : 0,
         }}
         transition={{
@@ -91,14 +91,14 @@ export default function CustomCursor({ isDark }: CustomCursorProps) {
         style={{
           x: dotX,
           y: dotY,
-          width: 10,
-          height: 10,
+          width: 8,
+          height: 8,
           translateX: "-50%",
           translateY: "-50%",
         }}
         animate={{
           opacity: isVisible ? 1 : 0,
-          scale: isHovering ? [1, 1.15, 1] : [1, 1.08, 1],
+          scale: isHovering ? [1, 1.12, 1] : [1, 1.05, 1],
         }}
         transition={{
           opacity: { duration: 0.2 },

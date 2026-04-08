@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 
 type NavbarProps = {
@@ -9,42 +9,32 @@ type NavbarProps = {
 
 const navItems = [
   { label: "Home", to: "/" },
-  { label: "About Me", to: "/about" },
+  { label: "About", to: "/about" },
+  { label: "Projects", to: "/projects" },
 ];
 
 export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const headerClasses = isDark
-    ? "sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl text-slate-100"
-    : "sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl text-slate-900";
+    ? "sticky top-0 z-50 border-b border-white/10 bg-slate-950/75 text-slate-100 backdrop-blur-xl"
+    : "sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 text-slate-900 backdrop-blur-xl";
 
-  const navLinkBase =
-    "relative text-sm font-medium transition-colors duration-200";
-
-  const navLinkClasses = ({ isActive }: { isActive: boolean }) =>
+  const desktopLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
-      navLinkBase,
+      "relative text-sm transition-colors duration-200",
       isDark
         ? isActive
-          ? "text-slate-100"
-          : "text-slate-300 hover:text-white"
+          ? "text-white"
+          : "text-slate-400 hover:text-slate-200"
         : isActive
           ? "text-slate-900"
-          : "text-slate-700 hover:text-slate-900",
+          : "text-slate-500 hover:text-slate-900",
     ].join(" ");
-
-  const primaryButtonClass = isDark
-    ? "inline-flex items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-medium text-slate-950 transition hover:bg-slate-100"
-    : "inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800";
-
-  const mobilePanelClass = isDark
-    ? "border-t border-white/10 bg-slate-950/95 backdrop-blur-xl"
-    : "border-t border-slate-200 bg-white/95 backdrop-blur-xl";
 
   const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
-      "rounded-xl px-4 py-3 text-sm font-medium transition",
+      "rounded-xl px-4 py-3 text-sm transition",
       isDark
         ? isActive
           ? "bg-white text-slate-950"
@@ -54,26 +44,30 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
           : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
     ].join(" ");
 
+  const ctaClass = isDark
+    ? "inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-slate-100"
+    : "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800";
+
   return (
     <header className={headerClasses}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
         <Link
           to="/"
-          className="text-lg font-semibold uppercase tracking-[0.2em]"
+          className="text-[15px] font-semibold tracking-[-0.02em] md:text-base"
           onClick={() => setIsOpen(false)}
         >
           Inamullah Mohammad
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-7 md:flex">
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} className={navLinkClasses}>
+            <NavLink key={item.to} to={item.to} className={desktopLinkClass}>
               {({ isActive }) => (
                 <span className="relative">
                   {item.label}
                   {isActive && (
                     <span
-                      className={`absolute -bottom-2 left-0 h-[2px] w-full rounded-full ${
+                      className={`absolute -bottom-2 left-0 h-[1.5px] w-full rounded-full ${
                         isDark ? "bg-white" : "bg-slate-900"
                       }`}
                     />
@@ -84,41 +78,47 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={toggleTheme}
             aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
             className={
               isDark
-                ? "inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition hover:bg-white/10"
-                : "inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/70 bg-slate-100 text-slate-900 transition hover:bg-slate-200"
+                ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-200 transition hover:bg-white/[0.08]"
+                : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-slate-50 text-slate-900 transition hover:bg-slate-100"
             }
           >
-            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {isDark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
           </button>
 
-          <a href="#contact" className={primaryButtonClass}>
-            Let&apos;s Talk
+          <a href="/#contact" className={`${ctaClass} hidden sm:inline-flex`}>
+            Contact
           </a>
 
           <button
             type="button"
-            className={
-              isDark
-                ? "inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-100 transition hover:bg-white/10 md:hidden"
-                : "inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300/70 bg-slate-100 text-slate-900 transition hover:bg-slate-200 md:hidden"
-            }
             onClick={() => setIsOpen((prev) => !prev)}
             aria-label="Toggle navigation"
+            className={
+              isDark
+                ? "inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-100 transition hover:bg-white/[0.08] md:hidden"
+                : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-slate-50 text-slate-900 transition hover:bg-slate-100 md:hidden"
+            }
           >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
           </button>
         </div>
       </div>
 
       {isOpen && (
-        <div className={`md:hidden ${mobilePanelClass}`}>
-          <nav className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-4">
+        <div
+          className={
+            isDark
+              ? "border-t border-white/10 bg-slate-950/95 backdrop-blur-xl md:hidden"
+              : "border-t border-slate-200 bg-white/95 backdrop-blur-xl md:hidden"
+          }
+        >
+          <nav className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -131,11 +131,11 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
             ))}
 
             <a
-              href="#contact"
-              className={`${primaryButtonClass} mt-2 w-full text-center`}
+              href="/#contact"
+              className={`${ctaClass} mt-2 w-full`}
               onClick={() => setIsOpen(false)}
             >
-              Let&apos;s Talk
+              Contact
             </a>
           </nav>
         </div>

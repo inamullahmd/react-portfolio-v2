@@ -2,88 +2,77 @@ type AboutMeProps = {
   isDark: boolean;
 };
 
-export default function AboutMe({ isDark}: AboutMeProps) {
+const focusAreas = [
+  {
+    title: "What I Work With",
+    text: "Angular, React, ASP.NET Core, PHP, SQL, Azure, Python ETL, ArcGIS JavaScript, and analytics tools for data-focused applications.",
+  },
+  {
+    title: "How I Build",
+    text: "I like systems that are clear, maintainable, and practical — good structure on the backend, thoughtful UI on the frontend, and decisions grounded in real user needs.",
+  },
+  {
+    title: "What I Care About",
+    text: "Clean architecture, useful interfaces, reliable delivery, and software that turns complex workflows into something understandable and usable.",
+  },
+];
+
+export default function AboutMe({ isDark }: AboutMeProps) {
+  const eyebrowClass = isDark
+    ? "text-[11px] uppercase tracking-[0.28em] text-slate-400"
+    : "text-[11px] uppercase tracking-[0.28em] text-slate-500";
+
+  const titleClass =
+    "mt-3 max-w-3xl text-3xl font-semibold leading-tight tracking-[-0.04em] md:text-[2.8rem]";
+
+  const bodyClass = isDark
+    ? "text-sm leading-relaxed text-slate-300 md:text-[15px]"
+    : "text-sm leading-relaxed text-slate-600 md:text-[15px]";
+
+  const mutedClass = isDark ? "text-slate-400" : "text-slate-500";
+  const borderClass = isDark ? "border-white/10" : "border-slate-200";
+
   return (
-    <section className="relative px-6 py-20">
-
+    <section className="relative px-6 py-14 md:py-16">
       <div className="mx-auto max-w-5xl">
-        <div
-          className={
-            isDark
-              ? "rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl md:p-12"
-              : "rounded-[2rem] border border-slate-200 bg-white p-8 backdrop-blur-xl md:p-12"
-          }
-        >
-          <div
-            className={
-              isDark
-                ? "text-sm uppercase tracking-[0.3em] text-slate-400"
-                : "text-sm uppercase tracking-[0.3em] text-slate-700"
-            }
-          >
-            About Me
-          </div>
+        <div className="max-w-3xl">
+          <div className={eyebrowClass}>About Me</div>
 
-          <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
-            I build software that connects strong engineering with practical user value.
+          <h1 className={titleClass}>
+            I build software that connects engineering, data, and practical user value.
           </h1>
 
-          <p
-            className={
-              isDark
-                ? "mt-6 max-w-3xl text-lg leading-relaxed text-slate-300"
-                : "mt-6 max-w-3xl text-lg leading-relaxed text-slate-600"
-            }
-          >
-            My work sits at the intersection of full-stack development, data,
-            and product thinking. I enjoy designing systems that are scalable,
-            maintainable, and clear to use—whether that means building frontend
-            experiences, backend APIs, data pipelines, or analytics platforms.
-          </p>
+          <div className={`mt-6 space-y-4 ${bodyClass}`}>
+            <p>
+              I’m a full-stack developer with experience across web applications,
+              backend systems, analytics workflows, and data-driven platforms. My
+              work usually sits where application development, structured data, and
+              real-world usability meet.
+            </p>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div
-              className={
-                isDark
-                  ? "rounded-2xl border border-white/10 bg-slate-900/60 p-6"
-                  : "rounded-2xl border border-slate-200 bg-slate-50 p-6"
-              }
-            >
-              <h2 className="text-xl font-semibold">What I Work With</h2>
-              <p
-                className={
-                  isDark
-                    ? "mt-3 leading-relaxed text-slate-300"
-                    : "mt-3 leading-relaxed text-slate-600"
-                }
-              >
-                Angular, ASP.NET Core, PHP, SQL, Azure, Python ETL, ArcGIS JS,
-                Power BI, and modern web technologies for building secure,
-                data-driven applications.
-              </p>
-            </div>
-
-            <div
-              className={
-                isDark
-                  ? "rounded-2xl border border-white/10 bg-slate-900/60 p-6"
-                  : "rounded-2xl border border-slate-200 bg-slate-50 p-6"
-              }
-            >
-              <h2 className="text-xl font-semibold">How I Think</h2>
-              <p
-                className={
-                  isDark
-                    ? "mt-3 leading-relaxed text-slate-300"
-                    : "mt-3 leading-relaxed text-slate-600"
-                }
-              >
-                I value clean code, strong architecture, thoughtful interfaces,
-                and systems that solve real problems without unnecessary
-                complexity.
-              </p>
-            </div>
+            <p>
+              I enjoy taking complex technical requirements and shaping them into
+              products that feel clear, scalable, and maintainable — whether that
+              means building frontend experiences, designing APIs, working with
+              databases, or supporting reporting and ETL pipelines behind the scenes.
+            </p>
           </div>
+        </div>
+
+        <div className={`mt-10 border-t ${borderClass}`} />
+
+        <div className="mt-8 grid gap-8 md:grid-cols-3 md:gap-10">
+          {focusAreas.map((item) => (
+            <div key={item.title}>
+              <h2 className="text-base font-semibold tracking-[-0.02em]">
+                {item.title}
+              </h2>
+
+              <p className={`mt-3 text-sm leading-relaxed ${mutedClass}`}>
+                {item.text}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
