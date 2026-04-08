@@ -1,20 +1,33 @@
-import { Routes, Route } from "react-router";
+import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
+import CustomCursor from "./components/ui/CustomCursor";
 import Home from "./pages/Home";
 import AboutMe from "./pages/AboutMe";
 
 export default function App() {
+  const [isDark, setIsDark] = useState(true);
+
+  const toggleTheme = () => {
+    setIsDark((prev) => !prev);
+  };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
-      <Navbar />
+    <div
+      className={
+        isDark
+          ? "min-h-screen bg-slate-950 text-slate-100 transition-colors duration-300"
+          : "min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300"
+      }
+    >
+      <CustomCursor isDark={isDark} />
 
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutMe />} />
-        </Routes>
-      </main>
+      <Navbar isDark={isDark} toggleTheme={toggleTheme} />
+
+      <Routes>
+        <Route path="/" element={<Home isDark={isDark} />} />
+        <Route path="/about" element={<AboutMe isDark={isDark} />} />
+      </Routes>
     </div>
   );
 }
