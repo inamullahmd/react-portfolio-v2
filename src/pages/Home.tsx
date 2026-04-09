@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { animate, motion, useMotionValue, useTransform } from "framer-motion";
-import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ArrowRight, Sparkles, ChevronDown, Mail } from "lucide-react";
+import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa6";
 
 type HomeProps = {
   isDark: boolean;
@@ -11,20 +11,23 @@ type HeroVisualProps = {
   isDark: boolean;
 };
 
+
 type ProjectItem = {
   title: string;
+  type: string;
   description: string;
   tech: string;
+  tags?: string[];
+  highlights?: string[];
+  liveUrl?: string;
+  githubUrl?: string;
 };
 
 type ExperienceItem = {
   company: string;
   role: string;
   period: string;
-  summary: string;
-  contribution: string;
-  stack: string;
-  accent: "violet" | "cyan" | "emerald";
+  contribution: string[];
 };
 
 type EducationItem = {
@@ -41,9 +44,10 @@ type CertificationItem = {
   type: string;
   description: string;
   issuer: string;
+  issued: string;
+  expiry?: string;
   verifyUrl: string;
-  logoText: string;
-  logoClass: string;
+  logo: string;
 };
 
 const experiences: ExperienceItem[] = [
@@ -51,65 +55,59 @@ const experiences: ExperienceItem[] = [
     company: "University of Oklahoma",
     role: "Full Stack Developer",
     period: "Jan 2023 - Present",
-    summary:
-      "Building public-facing platforms that combine engineering, analytics, and mapping into products that help planners, policymakers, and research teams work with complex housing data more clearly.",
-    contribution:
-      "Launched the Oklahoma Housing Needs Assessment platform, designed scalable APIs, integrated ArcGIS mapping, and built a Python ETL workflow that reduced annual data refresh time by 80%.",
-    stack: "Angular • PHP • MySQL • Python ETL • ArcGIS JS • SQL",
-    accent: "violet",
+    contribution: [
+      "Led the development of the Oklahoma Housing Needs Assessment platform and built secure APIs for large housing and planning datasets.",
+      "Built an automated Python ETL pipeline with validation checks and integrated ArcGIS-based mapping and analytics workflows into the platform.",
+      "Improved performance and reliability through SQL optimization, indexing, cleaner payload delivery, and deployment hardening.",
+    ],
   },
   {
     company: "Cognizant Technology Solutions",
     role: "Application Developer",
     period: "Jan 2021 - Dec 2022",
-    summary:
-      "Worked across enterprise frontend delivery, cloud APIs, authentication, and Azure-based ingestion workflows for secure production systems with strong operational visibility.",
-    contribution:
-      "Built Angular application layers, developed .NET and Python APIs on Azure App Service, and implemented data pipelines across Azure services for scalable enterprise workflows.",
-    stack: "Angular • .NET • Python • Azure • APIs • CI/CD",
-    accent: "cyan",
+    contribution: [
+      "Built Angular application layers with reusable UI components and secure authentication for enterprise workflows.",
+      "Developed ASP.NET Core and Python services on Microsoft Azure and supported backend integrations across APIs and connected systems.",
+      "Implemented ETL workflows for reporting data and improved operational reliability through logging, monitoring, and release support.",
+    ],
   },
   {
     company: "Purple Technologies",
     role: ".NET Developer",
     period: "May 2019 - Sep 2020",
-    summary:
-      "Delivered an operational college automation platform from requirements through deployment, with a strong focus on usability, role-based workflows, and reliable day-to-day system behavior.",
-    contribution:
-      "Built the portal using .NET, Entity Framework Core, and SQL Server to support admissions, attendance, grading, and fee tracking, then deployed and maintained it on IIS.",
-    stack: ".NET • EF Core • SQL Server • Bootstrap • IIS",
-    accent: "emerald",
+    contribution: [
+      "Designed and developed a college automation portal covering admissions, attendance, grading, and fee tracking workflows.",
+      "Handled the project from requirements gathering through development, testing, and deployment with a focus on structured admin flows and usability.",
+      "Deployed and maintained the application on IIS and supported ongoing fixes, updates, and operational stability.",
+    ],
   },
 ];
 
 const skillGroups = [
   {
-    label: "Frontend & UI",
+    label: "Core Programming",
     items: [
-      "Angular",
-      "React",
-      "TypeScript",
-      "JavaScript",
+      "C#",
+      "Python",
+      "Java",
+      "SQL",
+      "R",
       "HTML",
       "CSS",
-      "Tailwind CSS",
-      "Bootstrap",
+      "JavaScript",
+      "TypeScript",
     ],
   },
   {
-    label: "Backend & APIs",
-    items: [".NET", "C#", "PHP", "Python", "REST APIs", "Entity Framework Core"],
+    label: "Frameworks & Libraries",
+    items: [".NET", "Angular", "React", "Bootstrap", "Tailwind CSS"],
   },
   {
-    label: "Databases",
-    items: ["SQL", "MySQL", "SQL Server", "PostgreSQL", "Oracle", "MariaDB", "MongoDB"],
+    label: "Databases & Data",
+    items: ["SQL Server", "MySQL", "PostgreSQL", "Oracle", "MariaDB", "MongoDB"],
   },
   {
-    label: "Data & Analytics",
-    items: ["Python ETL", "Power BI", "Tableau", "ArcGIS JavaScript", "Jupyter", "R"],
-  },
-  {
-    label: "Cloud & Tools",
+    label: "Cloud & Developer Tools",
     items: [
       "Microsoft Azure",
       "Azure DevOps",
@@ -118,48 +116,134 @@ const skillGroups = [
       "Postman",
       "Swagger",
       "Docker",
-      "Linux",
     ],
+  },
+  {
+    label: "Analytics & Visualization",
+    items: ["Power BI", "Tableau", "ArcGIS JavaScript", "Jupyter Notebook"],
   },
 ];
 
 const projects: ProjectItem[] = [
   {
-    title: "Project Title 01",
+    title: "Gathering Place Parking Study",
+    type: "Featured",
     description:
-      "Short placeholder description for this project. Keep it to one or two lines on the homepage.",
-    tech: "Tech Stack • Add • Yours",
+      "Conducted a parking study for Gathering Place, a public park in Tulsa, by collecting parking data, analyzing demand patterns, and presenting findings through ArcGIS StoryMaps and geospatial visualizations.",
+    tech: "ArcGIS Online • ArcGIS StoryMaps • MS Office Suite",
   },
   {
-    title: "Project Title 02",
+    title: "Oklahoma Housing Needs Assessment",
+    type: "Featured",
     description:
-      "Short placeholder description for this project. Keep it concise and replace it later with your real summary.",
-    tech: "Tech Stack • Add • Yours",
+      "Developed a data-driven platform for analyzing housing conditions, surfacing planning insights, and presenting findings through interactive geospatial tools.",
+    tech: "Angular • PHP • MySQL • ArcGIS JS • Python",
+    highlights: [
+      "Built a platform that helped turn housing data into planning insights for public-facing use.",
+      "Supported researchers and policymakers with clearer access to geographic and housing trends.",
+      "Improved the reliability and usability of the system for working with large planning datasets."
+    ]
   },
   {
-    title: "Project Title 03",
+    title: "College Administrative System",
+    type: "Internal",
     description:
-      "Short placeholder description for this project. This card is intentionally compact for the homepage.",
-    tech: "Tech Stack • Add • Yours",
+      "Developed a college administrative system to streamline admissions, attendance, grading, and fee management through centralized academic workflows.",
+    tech: ".NET • EF Core • SQL Server • Bootstrap • IIS",
+    highlights: [
+      "Streamlined core academic workflows including admissions, attendance, grading, and fee tracking.",
+      "Designed a structured admin experience that made everyday operations easier to manage.",
+      "Handled the project across development, deployment, and ongoing maintenance."
+    ]
   },
   {
-    title: "Project Title 04",
+    title: "Twitter Sentiment Analysis",
+    type: "Academic",
     description:
-      "Short placeholder description for this project. You can later replace this with a real brief overview.",
-    tech: "Tech Stack • Add • Yours",
+      "Analyzed political sentiment on Twitter/X during the 2024 U.S. election cycle to understand how public opinion shifted across swing states, major candidates, and key campaign events.",
+    tech: "Python • Sentiment Analysis • Transformers • Data Visualization",
+    highlights: [
+      "Tracked voter sentiment across seven swing states over a six-month period.",
+      "Compared how public opinion changed around debates, candidate changes, and other major events.",
+      "Studied how predicted sentiment trends lined up with actual election outcomes."
+    ]
   },
   {
-    title: "Project Title 05",
+    title: "Enhanced Indexing Strategies for SQLite",
+    type: "Academic",
     description:
-      "Short placeholder description for this project. Keep the homepage version brief and clean.",
-    tech: "Tech Stack • Add • Yours",
+      "Implemented and evaluated custom GIN and BRIN indexing extensions in SQLite to study how alternative indexing strategies affect query performance on large datasets.",
+    tech: "C • SQLite • Indexing • Query Performance",
+    highlights: [
+      "Extended SQLite with custom indexing approaches to improve performance on large-scale queries.",
+      "Benchmarked creation time and query speed against standard indexing baselines.",
+      "Found BRIN to be the stronger fit for fast range queries, while GIN introduced significant setup and maintenance overhead."
+    ]
   },
   {
-    title: "Project Title 06",
+    title: "Estimation of Obesity Levels",
+    type: "Academic",
     description:
-      "Short placeholder description for this project. Full details can live on the separate Projects page.",
-    tech: "Tech Stack • Add • Yours",
+      "Built a machine learning project to estimate obesity levels from eating habits and physical condition data, using classification models to study how lifestyle and health factors relate to obesity outcomes.",
+    tech: "Python • Machine Learning • Data Analysis • Predictive Modeling",
+    highlights: [
+      "Prepared and balanced the dataset to improve model reliability across obesity categories.",
+      "Tested multiple classification models and compared them using accuracy, precision, recall, and F1 score.",
+      "Achieved the strongest results with SVM, reaching 99.17% accuracy on the final evaluation."
+    ],
+    "githubUrl": "https://github.com/inamullahmd/estimation-of-obesity-levels"
   },
+  {
+    title: "Prediction of Heart Disease",
+    type: "Academic",
+    description:
+      "Built a machine learning project to predict heart disease risk from large-scale health records, with a focus on supporting early diagnosis and understanding the tradeoff between strong detection rates and false positives.",
+    tech: "R • Machine Learning • Predictive Modeling • Data Analysis",
+    highlights: [
+      "Analyzed more than 319,000 health records to study factors linked to heart disease risk.",
+      "Compared three predictive approaches and evaluated them across accuracy, sensitivity, specificity, and related error measures.",
+      "Found that high overall accuracy still came with low specificity, leading to more false positives in practice."
+    ],
+    githubUrl: "https://github.com/inamullahmd/heart-disease-prediction"
+  },
+  {
+    title: "Loan Default Prediction",
+    type: "Academic",
+    description:
+      "Built a machine learning project to predict possible loan defaults from borrower data, with a focus on handling class imbalance and comparing supervised models for financial risk assessment.",
+    tech: "Python • Machine Learning • Predictive Modeling • Data Analysis",
+    highlights: [
+      "Worked with a dataset of 252,000 records to study patterns linked to potential loan default.",
+      "Preprocessed the data, handled imbalance, and compared multiple supervised learning approaches.",
+      "Found Random Forest to be the strongest overall model, while KNN showed much slower prediction time."
+    ],
+    githubUrl: "https://github.com/inamullahmd/loan-default-prediction"
+  },
+  {
+    title: "Tic-Tac-Toe RL Agent",
+    type: "Academic",
+    description:
+      "Built a reinforcement learning project to train an agent for Tic-Tac-Toe and compare how different learning strategies perform in a simple but strategic game environment.",
+    tech: "Python • Reinforcement Learning • Q-Learning • SARSA",
+    githubUrl: "https://github.com/inamullahmd/reinforced-learning-tic-tac-toe",
+    highlights: [
+      "Implemented and compared Q-Learning, SARSA, and Dynamic Programming for game-play decisions.",
+      "Studied how learning strategy and learning rate affected convergence and overall performance.",
+      "Used Dynamic Programming as a benchmark to evaluate how well the RL agents learned optimal play."
+    ]
+  },
+  {
+    title: "College Fest Website",
+    type: "Featured",
+    description:
+      "Built a college fest website to centralize event information, streamline participant registration, and support both online and offline payment workflows for the annual fest.",
+    tech: "Java • JSP • MySQL • JavaScript • Bootstrap",
+    highlights: [
+      "Created a single platform for event details, schedules, venues, and coordinator information.",
+      "Built a registration flow that allowed participants to sign up for events and choose between online and offline payment options.",
+      "Added reporting features for organizers to track participation, financial summaries, and winner lists."
+    ]
+  }
 ];
 
 const education: EducationItem[] = [
@@ -169,19 +253,20 @@ const education: EducationItem[] = [
     period: "Jan 2023 - Dec 2024",
     detail: "Norman, OK • GPA 3.9 / 4.0",
     activities: [
-      "Add academic, research, or student activity here",
-      "Add coursework, capstone, assistantship, or involvement here",
+      "Served as a Graduate Research Assistant, supporting housing data analysis and parking study initiatives.",
+      "Participated in the DSA Club through seminars and other technical events."
     ],
     accent: "violet",
   },
   {
     school: "Dhanekula Institute of Engineering & Technology",
-    degree: "Bachelor of Science in Computer Science & Engineering",
+    degree: "Bachelor of Technology in Computer Science & Engineering",
     period: "Jun 2016 - Nov 2020",
     detail: "Vijayawada, India • GPA 8.17 / 10.0",
     activities: [
-      "Add student activity, project, club, or leadership item here",
-      "Add technical involvement, event, or academic highlight here",
+      "Platinum member of the college R&D Club, leading teams on the development of a school automation system.",
+      "Technical Coordinator for the annual fest, managing website development and maintenance.",
+      "Coordinator for weekly department activities such as seminars, presentations, quizzes, and coding competitions."
     ],
     accent: "cyan",
   },
@@ -189,104 +274,286 @@ const education: EducationItem[] = [
 
 const certifications: CertificationItem[] = [
   {
-    title: "Certification Title 01",
-    type: "Professional Certificate",
+    title: "Azure Data Fundamentals",
+    type: "Professional Certification",
     description:
-      "Add a short description here about what this certification covers, what tools it focuses on, or what it validates.",
-    issuer: "Issuing Organization",
-    verifyUrl: "#",
-    logoText: "MS",
-    logoClass: "from-sky-400 to-blue-500",
+      "Validated foundational knowledge of Microsoft Azure data services, including relational and non-relational data, analytics workloads, and core data concepts.",
+    issuer: "Microsoft",
+    issued: "Feb 26, 2022",
+    verifyUrl: "https://learn.microsoft.com/api/credentials/share/en-us/InamullahMohammad-3148/DCFD5FBFAD9CA3A9?sharingId=B0CE504634BC7CA",
+    logo: "/logos/microsoft_logo.png",
   },
   {
-    title: "Certification Title 02",
-    type: "Specialization",
+    title: "Azure Developer Associate",
+    type: "Professional Certification",
     description:
-      "Add a short description here about what this certification covers, what tools it focuses on, or what it validates.",
-    issuer: "Issuing Organization",
-    verifyUrl: "#",
-    logoText: "GH",
-    logoClass: "from-slate-200 to-slate-400",
-  },
-  {
-    title: "Certification Title 03",
-    type: "Certificate",
-    description:
-      "Add a short description here about what this certification covers, what tools it focuses on, or what it validates.",
-    issuer: "Issuing Organization",
-    verifyUrl: "#",
-    logoText: "AZ",
-    logoClass: "from-cyan-300 to-violet-500",
-  },
-  {
-    title: "Certification Title 04",
-    type: "Professional Certificate",
-    description:
-      "Add a short description here about what this certification covers, what tools it focuses on, or what it validates.",
-    issuer: "Issuing Organization",
-    verifyUrl: "#",
-    logoText: "DB",
-    logoClass: "from-amber-300 to-orange-500",
+      "Validated expertise in designing, building, testing, and maintaining cloud applications and services on Microsoft Azure using tools and frameworks aligned with modern development practices.",
+    issuer: "Microsoft",
+    issued: "Feb 12, 2022",
+    expiry: "Feb 12, 2023",
+    verifyUrl: "https://learn.microsoft.com/api/credentials/share/en-us/InamullahMohammad-3148/2877FBCA704E6439?sharingId=B0CE504634BC7CA",
+    logo: "/logos/microsoft_logo.png",
   },
 ];
 
-function HeroVisual({ isDark }: HeroVisualProps) {
-  const ringClass = isDark ? "border-white/12" : "border-slate-300/70";
-  const glassClass = isDark
-    ? "border-white/10 bg-white/[0.05] backdrop-blur-2xl"
-    : "border-slate-300/70 bg-white/65 backdrop-blur-2xl";
+const terminalSequences = [
+  {
+    command: "npx create-innovation --latest",
+    output: [
+      "Fetching starter files...",
+      "Installing dependencies...",
+      "Scaffolding project...",
+    ],
+  },
+  {
+    command: "git checkout -b feature/analytics",
+    output: [
+      "Switching to new branch...",
+      "Tracking clean history...",
+      "Ready for first commit...",
+    ],
+  },
+  {
+    command: "pnpm dev --host",
+    output: [
+      "Compiling modules...",
+      "Starting local server...",
+      "Ready on localhost:5173",
+    ],
+  },
+  {
+    command: "docker compose up -d",
+    output: [
+      "Pulling service images...",
+      "Booting containers...",
+      "Environment is healthy...",
+    ],
+  },
+];
 
-  const glowClass = isDark
-    ? "bg-gradient-to-br from-violet-500/35 via-cyan-400/22 to-emerald-400/18"
-    : "bg-gradient-to-br from-violet-400/22 via-sky-400/18 to-emerald-400/18";
+function TypingTerminal({ isDark }: { isDark: boolean }) {
+  const [sequenceIndex, setSequenceIndex] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [mode, setMode] = useState<"typing" | "holding" | "deleting">("typing");
+  const [visibleLogs, setVisibleLogs] = useState(0);
+
+  const activeSequence = terminalSequences[sequenceIndex];
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (mode === "typing") {
+      if (typed.length < activeSequence.command.length) {
+        timeout = setTimeout(() => {
+          setTyped(activeSequence.command.slice(0, typed.length + 1));
+        }, 26 + Math.random() * 28);
+      } else {
+        timeout = setTimeout(() => {
+          setMode("holding");
+          setVisibleLogs(1);
+        }, 500);
+      }
+    }
+
+    if (mode === "holding") {
+      if (visibleLogs < activeSequence.output.length) {
+        timeout = setTimeout(() => {
+          setVisibleLogs((prev) => prev + 1);
+        }, 340);
+      } else {
+        timeout = setTimeout(() => {
+          setMode("deleting");
+        }, 1400);
+      }
+    }
+
+    if (mode === "deleting") {
+      if (typed.length > 0) {
+        timeout = setTimeout(() => {
+          setTyped((prev) => prev.slice(0, -1));
+        }, 16);
+      } else {
+        timeout = setTimeout(() => {
+          setVisibleLogs(0);
+          setMode("typing");
+          setSequenceIndex((prev) => (prev + 1) % terminalSequences.length);
+        }, 240);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [typed, mode, visibleLogs, activeSequence, sequenceIndex]);
 
   return (
-    <div className="relative mx-auto h-[340px] w-full max-w-[440px] lg:h-[430px]">
-      <motion.div
-        className={`absolute left-1/2 top-1/2 h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl ${glowClass}`}
-        animate={{
-          scale: [1, 1.06, 0.98, 1],
-          x: [0, 10, -8, 0],
-          y: [0, -10, 8, 0],
-        }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <div
+      className={`relative overflow-hidden rounded-[1.35rem] border shadow-[0_24px_80px_rgba(0,0,0,0.22)] ${
+        isDark
+          ? "border-white/10 bg-[#0b1020]/90 backdrop-blur-xl"
+          : "border-slate-300/70 bg-white/90 backdrop-blur-xl"
+      }`}
+    >
+      <div
+        className={`flex items-center gap-2 border-b px-4 py-3 ${
+          isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-slate-50/80"
+        }`}
+      >
+        <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+      </div>
 
-      <motion.div
-        className={`absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border ${ringClass}`}
-        animate={{ rotate: 360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      />
+      <div className="relative px-5 py-5 font-mono text-[13px] leading-7 md:text-[14px]">
+        <motion.div
+          className={`absolute inset-y-0 -left-20 w-20 skew-x-[-22deg] ${
+            isDark
+              ? "bg-gradient-to-r from-transparent via-white/8 to-transparent"
+              : "bg-gradient-to-r from-transparent via-white/70 to-transparent"
+          }`}
+          animate={{ x: ["0%", "620%"] }}
+          transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-      <motion.div
-        className={`absolute left-1/2 top-1/2 h-[210px] w-[210px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed ${ringClass}`}
-        animate={{ rotate: -360 }}
-        transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-      />
+        <div className="relative z-10">
+          <div className="flex items-center gap-2">
+            <span className={isDark ? "text-emerald-300" : "text-emerald-600"}>$</span>
 
-      <motion.div
-        className={`absolute left-[10%] top-[19%] h-16 w-16 rounded-full border ${glassClass}`}
-        animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-      />
+            <span className={isDark ? "text-emerald-300" : "text-emerald-600"}>
+              {typed}
+            </span>
 
-      <motion.div
-        className={`absolute right-[10%] top-[14%] h-20 w-20 rounded-full border ${glassClass}`}
-        animate={{ y: [0, 12, 0], x: [0, -7, 0] }}
-        transition={{ duration: 8.5, repeat: Infinity, ease: "easeInOut" }}
-      />
+            <motion.span
+              className={`inline-block h-[18px] w-[8px] ${
+                isDark ? "bg-violet-400/90" : "bg-violet-600/90"
+              }`}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
 
-      <motion.div
-        className={`absolute bottom-[12%] left-[16%] h-14 w-14 rounded-full border ${glassClass}`}
-        animate={{ y: [0, 9, 0], x: [0, -6, 0] }}
-        transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
-      />
+          <div className="mt-1 space-y-0.5 pl-5">
+            {activeSequence.output.slice(0, visibleLogs).map((line) => (
+              <motion.div
+                key={line}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.22 }}
+                className={isDark ? "text-slate-400" : "text-slate-500"}
+              >
+                › {line}
+              </motion.div>
+            ))}
 
-      <motion.div
-        className={`absolute bottom-[10%] right-[12%] h-24 w-24 rounded-full border ${glassClass}`}
-        animate={{ y: [0, -12, 0], x: [0, 9, 0] }}
-        transition={{ duration: 9.5, repeat: Infinity, ease: "easeInOut" }}
-      />
+            {visibleLogs === activeSequence.output.length && mode !== "deleting" ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.35, 1, 0.35] }}
+                transition={{ duration: 1.3, repeat: Infinity }}
+                className={isDark ? "text-slate-300" : "text-slate-600"}
+              >
+                portfolio_v2 git:(main)
+              </motion.div>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HeroVisual({ isDark }: HeroVisualProps) {
+  return (
+    <div className="relative mx-auto h-[360px] w-full max-w-[560px] lg:h-[460px]">
+      <div
+        className={`absolute inset-0 overflow-hidden rounded-[2rem] border ${
+          isDark
+            ? "border-white/8 bg-[radial-gradient(circle_at_35%_18%,rgba(168,85,247,0.14),transparent_28%),radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))]"
+            : "border-slate-300/70 bg-[radial-gradient(circle_at_35%_18%,rgba(168,85,247,0.10),transparent_28%),radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.10),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.9),rgba(248,250,252,0.92))]"
+        }`}
+      >
+        <div
+          className={`absolute inset-0 ${
+            isDark
+              ? "bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)]"
+              : "bg-[linear-gradient(rgba(148,163,184,0.13)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.13)_1px,transparent_1px)]"
+          } bg-[size:28px_28px] opacity-40`}
+        />
+
+        <motion.div
+          className={`absolute -left-8 top-16 h-24 w-64 rounded-full blur-3xl ${
+            isDark ? "bg-violet-500/14" : "bg-violet-400/10"
+          }`}
+          animate={{
+            x: [0, 24, -10, 0],
+            y: [0, -12, 8, 0],
+          }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <motion.div
+          className={`absolute right-0 top-10 h-28 w-72 rounded-full blur-3xl ${
+            isDark ? "bg-sky-500/12" : "bg-sky-400/9"
+          }`}
+          animate={{
+            x: [0, -20, 12, 0],
+            y: [0, 10, -8, 0],
+          }}
+          transition={{ duration: 10.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <svg
+          className="absolute inset-0 h-full w-full"
+          viewBox="0 0 560 460"
+          fill="none"
+          aria-hidden="true"
+        >
+          <motion.path
+            d="M-20 126C58 120 116 168 178 162C232 156 274 118 336 126C394 134 440 180 582 174"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            className={isDark ? "text-white/8" : "text-slate-400/35"}
+            animate={{ pathLength: [0.2, 1, 0.2], opacity: [0.12, 0.45, 0.12] }}
+            transition={{ duration: 7.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.path
+            d="M-20 286C64 272 110 318 180 320C250 322 312 252 390 262C452 270 486 320 580 330"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            className={isDark ? "text-white/8" : "text-slate-400/35"}
+            animate={{ pathLength: [1, 0.22, 1], opacity: [0.12, 0.4, 0.12] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </svg>
+
+        <div
+          className={`absolute left-10 top-8 text-[10px] font-mono ${
+            isDark ? "text-white/5" : "text-slate-500/10"
+          }`}
+        >
+          const state = useState(null)
+        </div>
+        <div
+          className={`absolute right-12 top-12 text-[10px] font-mono ${
+            isDark ? "text-white/5" : "text-slate-500/10"
+          }`}
+        >
+          void main() {"{}"}
+        </div>
+        <div
+          className={`absolute left-16 bottom-20 text-[10px] font-mono ${
+            isDark ? "text-white/5" : "text-slate-500/10"
+          }`}
+        >
+          docker-compose up -d
+        </div>
+
+        <motion.div
+          className="absolute left-1/2 top-1/2 w-[78%] max-w-[360px] -translate-x-1/2 -translate-y-1/2"
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <TypingTerminal isDark={isDark} />
+        </motion.div>
+      </div>
     </div>
   );
 }
@@ -294,12 +561,10 @@ function HeroVisual({ isDark }: HeroVisualProps) {
 function SectionIntro({
   eyebrow,
   title,
-  sideText,
   isDark,
 }: {
   eyebrow: string;
   title: string;
-  sideText?: string;
   isDark: boolean;
 }) {
   return (
@@ -319,18 +584,6 @@ function SectionIntro({
           {title}
         </h2>
       </div>
-
-      {sideText ? (
-        <p
-          className={
-            isDark
-              ? "max-w-sm text-sm leading-relaxed text-slate-400"
-              : "max-w-sm text-sm leading-relaxed text-slate-500"
-          }
-        >
-          {sideText}
-        </p>
-      ) : null}
     </div>
   );
 }
@@ -342,25 +595,11 @@ function ExperienceRow({
   item: ExperienceItem;
   isDark: boolean;
 }) {
-  const accentMap = {
-    violet: {
-      glow: isDark
-        ? "from-violet-500/10 via-violet-400/5 to-transparent"
-        : "from-violet-300/18 via-violet-200/8 to-transparent",
-    },
-    cyan: {
-      glow: isDark
-        ? "from-cyan-500/10 via-cyan-400/5 to-transparent"
-        : "from-sky-300/18 via-sky-200/8 to-transparent",
-    },
-    emerald: {
-      glow: isDark
-        ? "from-emerald-500/10 via-emerald-400/5 to-transparent"
-        : "from-emerald-300/18 via-emerald-200/8 to-transparent",
-    },
-  } as const;
+  const glowClass = isDark
+    ? "from-violet-500/8 via-violet-400/4 to-transparent"
+    : "from-slate-300/20 via-slate-200/10 to-transparent";
 
-  const accent = accentMap[item.accent];
+  const dotClass = isDark ? "bg-violet-300" : "bg-slate-500";
 
   return (
     <motion.article
@@ -371,11 +610,11 @@ function ExperienceRow({
       className="group relative py-2 md:py-3"
     >
       <div
-        className={`pointer-events-none absolute inset-0 rounded-[1.4rem] bg-gradient-to-r ${accent.glow} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+        className={`pointer-events-none absolute inset-0 rounded-[1.4rem] bg-gradient-to-r ${glowClass} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
       />
 
-      <div className="grid gap-6 rounded-[1.4rem] px-4 py-6 md:px-5 md:py-7 lg:grid-cols-[170px_minmax(0,1fr)_260px] lg:gap-7 lg:px-6">
-        <div className="space-y-2.5">
+      <div className="grid gap-6 rounded-[1.4rem] px-4 py-6 md:px-5 md:py-7 lg:grid-cols-12 lg:gap-8 lg:px-6">
+        <div className="space-y-3 lg:col-span-3">
           <p
             className={
               isDark
@@ -386,23 +625,14 @@ function ExperienceRow({
             {item.company}
           </p>
 
-          <p className="text-xs tracking-wide text-slate-500">{item.period}</p>
-        </div>
-
-        <div>
-          <h3 className="text-[1.35rem] font-semibold tracking-[-0.04em] md:text-[1.55rem]">
+          <h3 className="text-[1.2rem] font-semibold tracking-[-0.04em] md:text-[1.35rem]">
             {item.role}
           </h3>
 
-          <p
-            className={`mt-3 max-w-2xl text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"
-              }`}
-          >
-            {item.summary}
-          </p>
+          <p className="text-xs tracking-wide text-slate-500">{item.period}</p>
         </div>
 
-        <div>
+        <div className="min-w-0 lg:col-span-9">
           <p
             className={
               isDark
@@ -410,17 +640,22 @@ function ExperienceRow({
                 : "text-[11px] uppercase tracking-[0.26em] text-slate-600"
             }
           >
-            What I Built
+            Key Contributions
           </p>
 
-          <p
-            className={`mt-3 text-sm leading-relaxed ${isDark ? "text-slate-200" : "text-slate-700"
-              }`}
-          >
-            {item.contribution}
-          </p>
-
-          <p className="mt-4 text-xs tracking-wide text-slate-500">{item.stack}</p>
+          <div className="mt-3 space-y-3">
+            {item.contribution.map((point) => (
+              <div key={point} className="flex gap-2.5">
+                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${dotClass}`} />
+                <p
+                  className={`text-sm leading-relaxed break-words ${isDark ? "text-slate-200" : "text-slate-700"
+                    }`}
+                >
+                  {point}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </motion.article>
@@ -463,9 +698,9 @@ function EducationRow({
         className={`pointer-events-none absolute inset-0 rounded-[1.4rem] bg-gradient-to-r ${accent.glow} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
       />
 
-      <div className="grid gap-6 rounded-[1.4rem] px-4 py-6 md:px-5 md:py-7 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-7 lg:px-6">
+      <div className="grid gap-6 rounded-[1.4rem] px-4 py-6 md:px-5 md:py-7 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-8 lg:px-6">
         <div className="space-y-3">
-          <h3 className="text-[1.3rem] font-semibold tracking-[-0.04em] md:text-[1.5rem]">
+          <h3 className="text-[1.12rem] font-semibold tracking-[-0.04em] md:text-[1.28rem]">
             {item.degree}
           </h3>
 
@@ -483,12 +718,12 @@ function EducationRow({
           <p className="text-xs tracking-wide text-slate-500">{item.period}</p>
         </div>
 
-        <div>
+        <div className="min-w-0">
           <p
             className={
               isDark
                 ? "text-[11px] uppercase tracking-[0.26em] text-slate-400"
-                : "text-[11px] uppercase tracking-[0.26em] text-slate-600"
+                : "text-[11px] uppercase tracking-[0.26em] text-slate-700"
             }
           >
             Activities & Focus
@@ -497,7 +732,9 @@ function EducationRow({
           <div className="mt-3 space-y-3">
             {item.activities.map((activity) => (
               <div key={activity} className="flex gap-2.5">
-                <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${accent.dot}`} />
+                <span
+                  className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${accent.dot}`}
+                />
                 <p
                   className={`text-sm leading-relaxed ${isDark ? "text-slate-200" : "text-slate-700"
                     }`}
@@ -520,13 +757,13 @@ function ProjectCard({
   project: ProjectItem;
   isDark: boolean;
 }) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className={`h-full rounded-[1.25rem] border p-4 md:p-5 ${isDark
-        ? "border-white/10 bg-white/[0.03]"
-        : "border-slate-200 bg-white"
+      className={`h-full rounded-[1.25rem] border p-4 md:p-5 ${isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white"
         }`}
     >
       <p
@@ -536,7 +773,7 @@ function ProjectCard({
             : "text-[10px] uppercase tracking-[0.24em] text-slate-500"
         }
       >
-        Featured Project
+        {project.type} Project
       </p>
 
       <h3 className="mt-3 text-base font-semibold tracking-[-0.03em] md:text-[1.05rem]">
@@ -544,13 +781,107 @@ function ProjectCard({
       </h3>
 
       <p
-        className={`mt-3 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"
+        className={`mt-3 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
           }`}
       >
         {project.description}
       </p>
 
-      <p className="mt-4 text-[11px] tracking-wide text-slate-500">{project.tech}</p>
+      <p
+        className={
+          isDark
+            ? "mt-4 text-[12px] leading-relaxed text-slate-400"
+            : "mt-4 text-[12px] leading-relaxed text-slate-500"
+        }
+      >
+        <span className="font-medium">Tech:</span> {project.tech}
+      </p>
+
+      {project.tags && project.tags.length > 0 ? (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className={
+                isDark
+                  ? "rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-400"
+                  : "rounded-full border border-slate-200 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-500"
+              }
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
+      {(project.liveUrl || project.githubUrl) ? (
+        <div className="mt-4 flex flex-wrap gap-3">
+          {project.liveUrl ? (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={
+                isDark
+                  ? "text-xs font-medium text-slate-200 transition hover:text-white"
+                  : "text-xs font-medium text-slate-700 transition hover:text-slate-950"
+              }
+            >
+              Live Website
+            </a>
+          ) : null}
+
+          {project.githubUrl ? (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${isDark
+                ? "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:text-white"
+                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                }`}
+            >
+              <FaGithub className="h-3.5 w-3.5" />
+              GitHub Repo
+            </a>
+          ) : null}
+        </div>
+      ) : null}
+
+      {project.highlights && project.highlights.length > 0 ? (
+        <div className={`mt-4 border-t pt-4 ${isDark ? "border-white/10" : "border-slate-200"}`}>
+          <button
+            type="button"
+            onClick={() => setExpanded((prev) => !prev)}
+            className={
+              isDark
+                ? "text-xs font-medium text-slate-300 transition hover:text-white"
+                : "text-xs font-medium text-slate-700 transition hover:text-slate-950"
+            }
+          >
+            {expanded ? "Hide highlights" : "View highlights"}
+          </button>
+
+          {expanded ? (
+            <div className="mt-3 space-y-2.5">
+              {project.highlights.map((point) => (
+                <div key={point} className="flex gap-2.5">
+                  <span
+                    className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? "bg-slate-400" : "bg-slate-500"
+                      }`}
+                  />
+                  <p
+                    className={`text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
+                      }`}
+                  >
+                    {point}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </motion.article>
   );
 }
@@ -567,16 +898,16 @@ function CertificationGridCard({
       whileHover={{ y: -3 }}
       transition={{ duration: 0.18 }}
       className={`h-full rounded-[1.25rem] border p-5 ${isDark
-          ? "border-white/10 bg-white/[0.03]"
-          : "border-slate-200 bg-white"
+        ? "border-white/10 bg-white/[0.03]"
+        : "border-slate-200 bg-white"
         }`}
     >
       <div className="flex justify-center">
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-[0.95rem] bg-gradient-to-br ${item.logoClass} text-xs font-semibold text-slate-950 shadow-[0_8px_18px_rgba(0,0,0,0.18)]`}
-        >
-          {item.logoText}
-        </div>
+        <img
+          src={item.logo}
+          alt={`${item.issuer} logo`}
+          className="h-10 w-auto object-contain md:h-11"
+        />
       </div>
 
       <div className="mt-4 text-center">
@@ -605,8 +936,19 @@ function CertificationGridCard({
         </p>
       </div>
 
+      <div
+        className={
+          isDark
+            ? "mt-3 space-y-1 text-xs text-slate-400"
+            : "mt-3 space-y-1 text-xs text-slate-500"
+        }
+      >
+        <p>Issued: {item.issued}</p>
+        {item.expiry && <p>Expires: {item.expiry}</p>}
+      </div>
+
       <p
-        className={`mt-4 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"
+        className={`mt-4 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
           }`}
       >
         {item.description}
@@ -639,9 +981,15 @@ export default function Home({ isDark }: HomeProps) {
     ? "inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-100 transition hover:bg-white/[0.08]"
     : "inline-flex items-center justify-center rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-50";
 
-  const pillClass = isDark
-    ? "rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-slate-300"
-    : "rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] text-slate-600";
+  const PROJECTS_PER_PAGE = 3;
+  const [projectPage, setProjectPage] = useState(1);
+
+  const totalProjectPages = Math.ceil(projects.length / PROJECTS_PER_PAGE);
+
+  const paginatedProjects = projects.slice(
+    (projectPage - 1) * PROJECTS_PER_PAGE,
+    projectPage * PROJECTS_PER_PAGE
+  );
 
   return (
     <>
@@ -662,7 +1010,7 @@ export default function Home({ isDark }: HomeProps) {
               className={
                 isDark
                   ? "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] uppercase tracking-[0.24em] text-slate-300"
-                  : "inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white px-3 py-1.5 text-[10px] uppercase tracking-[0.24em] text-slate-600"
+                  : "inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white px-3 py-1.5 text-[10px] uppercase tracking-[0.24em] text-slate-700"
               }
             >
               <Sparkles className="h-3.5 w-3.5" />
@@ -694,15 +1042,17 @@ export default function Home({ isDark }: HomeProps) {
               className={
                 isDark
                   ? "mt-5 max-w-[620px] text-sm leading-relaxed text-slate-300 md:text-[15px]"
-                  : "mt-5 max-w-[620px] text-sm leading-relaxed text-slate-600 md:text-[15px]"
+                  : "mt-5 max-w-[620px] text-sm leading-relaxed text-slate-700 md:text-[15px]"
               }
             >
-              I work across frontend development, backend APIs, cloud systems,
-              ETL workflows, analytics tooling, and geospatial applications —
-              turning complex requirements into clear, maintainable software.
+              Full-stack developer with over 5 years of experience building secure,
+              scalable web applications and data platforms. I work across modern
+              frontend development, backend APIs, cloud-based systems, ETL
+              workflows, and analytics-focused solutions that turn complex
+              requirements into clean, practical user experiences.
             </motion.p>
 
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -711,7 +1061,7 @@ export default function Home({ isDark }: HomeProps) {
               <span className={pillClass}>Angular / React</span>
               <span className={pillClass}>.NET / PHP / APIs</span>
               <span className={pillClass}>Azure / SQL / ETL</span>
-            </motion.div>
+            </motion.div> */}
 
             <motion.div
               initial={{ opacity: 0, y: 14 }}
@@ -719,13 +1069,18 @@ export default function Home({ isDark }: HomeProps) {
               transition={{ duration: 0.6, delay: 0.24 }}
               className="mt-7 flex flex-wrap items-center gap-3"
             >
-              <a href="#experience" className={primaryButtonClass}>
-                Explore Experience <ArrowRight className="ml-2 h-4 w-4" />
+              <a href="#projects" className={primaryButtonClass}>
+                View Projects <ArrowRight className="ml-2 h-4 w-4" />
               </a>
 
-              <Link to="/about" className={secondaryButtonClass}>
-                About Me
-              </Link>
+              <a
+                href="files/INAMULLAH_MOHAMMAD.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className={secondaryButtonClass}
+              >
+                Resume
+              </a>
             </motion.div>
           </div>
 
@@ -737,6 +1092,51 @@ export default function Home({ isDark }: HomeProps) {
           >
             <HeroVisual isDark={isDark} />
           </motion.div>
+        </div>
+      </section>
+
+      <section id="about" className="px-6 py-12 md:py-14">
+        <div className="mx-auto max-w-[1180px]">
+          <SectionIntro
+            eyebrow="About Me"
+            title="A little more about how I work."
+            isDark={isDark}
+          />
+
+          <div className={`mt-8 border-t ${isDark ? "border-white/10" : "border-slate-200"}`}>
+            <div className="grid gap-8 py-6 md:grid-cols-2 md:gap-10">
+              <div>
+                <p
+                  className={
+                    isDark
+                      ? "text-sm leading-relaxed text-slate-300 md:text-[15px]"
+                      : "text-sm leading-relaxed text-slate-600 md:text-[15px]"
+                  }
+                >
+                  I like building software that sits between strong engineering and
+                  practical user needs. My approach is structured and systems-oriented
+                  — clear architecture, reliable backend logic, and interfaces that
+                  make complex workflows easier to understand and use.
+                </p>
+              </div>
+
+              <div>
+                <p
+                  className={
+                    isDark
+                      ? "text-sm leading-relaxed text-slate-300 md:text-[15px]"
+                      : "text-sm leading-relaxed text-slate-600 md:text-[15px]"
+                  }
+                >
+                  My long-term goal is to build products that create real public value
+                  — tools that support community welfare, improve access to useful
+                  information, and help people make better decisions through
+                  thoughtful, data-driven software. I am especially drawn to work that
+                  feels meaningful, usable, and built for impact beyond just delivery.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -765,7 +1165,6 @@ export default function Home({ isDark }: HomeProps) {
           <SectionIntro
             eyebrow="Skills"
             title="Tools I use to design, build, and ship."
-            sideText="Kept compact on purpose."
             isDark={isDark}
           />
 
@@ -792,8 +1191,8 @@ export default function Home({ isDark }: HomeProps) {
                       key={skill}
                       className={
                         isDark
-                          ? "rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] text-slate-200"
-                          : "rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] text-slate-700"
+                          ? "rounded-xl border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] text-slate-200"
+                          : "rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] text-slate-700"
                       }
                     >
                       {skill}
@@ -806,19 +1205,18 @@ export default function Home({ isDark }: HomeProps) {
         </div>
       </section>
 
-      <section id="projects-preview" className="px-6 py-12 md:py-14">
+      <section id="projects" className="px-6 py-12 md:py-14">
         <div className="mx-auto max-w-[1180px]">
           <SectionIntro
             eyebrow="Selected Projects"
             title="Some things I’ve built."
-            sideText="Compact homepage cards. Full details can live on the Projects page."
             isDark={isDark}
           />
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project, index) => (
+            {paginatedProjects.map((project, index) => (
               <motion.div
-                key={project.title}
+                key={`${project.title}-${projectPage}`}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -829,18 +1227,59 @@ export default function Home({ isDark }: HomeProps) {
             ))}
           </div>
 
-          <div className="mt-6 flex justify-start">
-            <Link
-              to="/projects"
-              className={
-                isDark
-                  ? "inline-flex items-center gap-2 text-sm text-slate-200 transition hover:text-white"
-                  : "inline-flex items-center gap-2 text-sm text-slate-700 transition hover:text-slate-950"
-              }
-            >
-              View all projects <ExternalLink className="h-4 w-4" />
-            </Link>
-          </div>
+          {totalProjectPages > 1 ? (
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setProjectPage((prev) => Math.max(prev - 1, 1))}
+                disabled={projectPage === 1}
+                className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${projectPage === 1
+                  ? isDark
+                    ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
+                    : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
+                  : isDark
+                    ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
+                    : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  }`}
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalProjectPages }, (_, i) => i + 1).map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => setProjectPage(pageNumber)}
+                  className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-medium transition ${projectPage === pageNumber
+                    ? isDark
+                      ? "border border-white/10 bg-white text-slate-950"
+                      : "border border-slate-900 bg-slate-900 text-white"
+                    : isDark
+                      ? "border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08]"
+                      : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => setProjectPage((prev) => Math.min(prev + 1, totalProjectPages))}
+                disabled={projectPage === totalProjectPages}
+                className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${projectPage === totalProjectPages
+                  ? isDark
+                    ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
+                    : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
+                  : isDark
+                    ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
+                    : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  }`}
+              >
+                Next
+              </button>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -849,7 +1288,6 @@ export default function Home({ isDark }: HomeProps) {
           <SectionIntro
             eyebrow="Education"
             title="Academic foundations behind the engineering and analytics."
-            sideText="Kept editorial and compact, just before the final contact block."
             isDark={isDark}
           />
 
@@ -870,7 +1308,6 @@ export default function Home({ isDark }: HomeProps) {
           <SectionIntro
             eyebrow="Certifications"
             title="Professional learning and credentials."
-            sideText="Simple cards, kept compact."
             isDark={isDark}
           />
 
@@ -890,55 +1327,122 @@ export default function Home({ isDark }: HomeProps) {
         </div>
       </section>
 
-      <section id="contact" className="px-6 pb-16 pt-10 md:pb-20">
+      <section id="contact" className="px-6 py-12 md:py-14">
         <div className="mx-auto max-w-[1180px]">
-          <div className={isDark ? "border-t border-white/10 pt-8" : "border-t border-slate-200 pt-8"}>
-            <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_220px] md:items-end">
-              <div>
-                <div
-                  className={
-                    isDark
-                      ? "text-[11px] uppercase tracking-[0.28em] text-slate-400"
-                      : "text-[11px] uppercase tracking-[0.28em] text-slate-500"
-                  }
-                >
-                  Contact
-                </div>
-
-                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em] md:text-[2rem]">
-                  Let&apos;s build something thoughtful.
-                </h2>
-
-                <p
-                  className={
-                    isDark
-                      ? "mt-4 max-w-2xl text-sm leading-relaxed text-slate-300"
-                      : "mt-4 max-w-2xl text-sm leading-relaxed text-slate-600"
-                  }
-                >
-                  Add your email, LinkedIn, and GitHub links here and keep this final
-                  section direct and minimal.
-                </p>
+          <div
+            className={`rounded-[1.5rem] border px-5 py-8 md:px-8 md:py-10 ${isDark
+                ? "border-white/10 bg-white/[0.03]"
+                : "border-slate-200 bg-white"
+              }`}
+          >
+            <div className="max-w-2xl">
+              <div
+                className={
+                  isDark
+                    ? "text-[11px] uppercase tracking-[0.28em] text-slate-400"
+                    : "text-[11px] uppercase tracking-[0.28em] text-slate-500"
+                }
+              >
+                Let&apos;s Talk
               </div>
 
-              <div className="flex flex-wrap gap-3 md:justify-end">
-                <a href="mailto:your.email@example.com" className={primaryButtonClass}>
-                  Email Me
-                </a>
+              <h2 className="mt-3 text-[1.8rem] font-semibold tracking-[-0.04em] md:text-[2.2rem]">
+                Let&apos;s work together.
+              </h2>
 
-                <a
-                  href="https://www.linkedin.com/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className={secondaryButtonClass}
-                >
-                  LinkedIn
-                </a>
-              </div>
+              <p
+                className={
+                  isDark
+                    ? "mt-4 max-w-xl text-sm leading-relaxed text-slate-300 md:text-[15px]"
+                    : "mt-4 max-w-xl text-sm leading-relaxed text-slate-600 md:text-[15px]"
+                }
+              >
+                I&apos;m open to full-stack development roles, data-focused work,
+                research collaborations, and thoughtful software projects. Feel free
+                to reach out if you&apos;d like to connect.
+              </p>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a
+                href="mailto:inamullahmohammadmdi@gmail.com"
+                className={
+                  isDark
+                    ? "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.08] hover:text-white"
+                    : "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
+                }
+              >
+                <Mail className="h-3.5 w-3.5" />
+                Email
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/inamullahmd/"
+                target="_blank"
+                rel="noreferrer"
+                className={
+                  isDark
+                    ? "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.08] hover:text-white"
+                    : "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
+                }
+              >
+                <FaLinkedin className="h-3.5 w-3.5" />
+                LinkedIn
+              </a>
+
+              <a
+                href="https://www.discordapp.com/users/inamullahmd"
+                target="_blank"
+                rel="noreferrer"
+                className={
+                  isDark
+                    ? "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.08] hover:text-white"
+                    : "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
+                }
+              >
+                <FaDiscord className="h-3.5 w-3.5" />
+                Discord
+              </a>
+
+              <a
+                href="https://github.com/inamullahmd"
+                target="_blank"
+                rel="noreferrer"
+                className={
+                  isDark
+                    ? "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.08] hover:text-white"
+                    : "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-950"
+                }
+              >
+                <FaGithub className="h-3.5 w-3.5" />
+                GitHub
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      <footer className="px-6 pb-16 pt-6 md:pb-20">
+        <div className="mx-auto max-w-[1180px]">
+          <div
+            className={
+              isDark
+                ? "border-t border-white/10 pt-6"
+                : "border-t border-slate-200 pt-6"
+            }
+          >
+            <p
+              className={
+                isDark
+                  ? "text-sm text-slate-400"
+                  : "text-sm text-slate-500"
+              }
+            >
+              © 2026 All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }

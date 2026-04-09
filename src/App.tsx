@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import CustomCursor from "./components/ui/CustomCursor";
-import AboutMe from "./pages/AboutMe";
 import Home from "./pages/Home";
+import ScrollToHash from "@/components/ui/ScrollToHash";
 
 export default function App() {
   const [isDark, setIsDark] = useState(true);
@@ -22,10 +22,9 @@ export default function App() {
     >
       <CustomCursor isDark={isDark} />
       <Navbar isDark={isDark} toggleTheme={toggleTheme} />
-
+      <ScrollToHash />
       <Routes>
         <Route path="/" element={<Home isDark={isDark} />} />
-        <Route path="/about" element={<AboutMe isDark={isDark} />} />
       </Routes>
     </div>
   );

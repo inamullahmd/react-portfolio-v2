@@ -7,20 +7,27 @@ type NavbarProps = {
   toggleTheme: () => void;
 };
 
-const navItems = [
-  { label: "Home", to: "/" },
-  { label: "About", to: "/about" },
-  { label: "Projects", to: "/projects" },
+const pageItems = [{ label: "Home", to: "/" }];
+
+const sectionItems = [
+  { label: "About", to: "/#about" },
+  { label: "Experience", to: "/#experience" },
+  { label: "Skills", to: "/#skills" },
+  { label: "Projects", to: "/#projects" },
+  { label: "Education", to: "/#education" },
+  { label: "Contact", to: "/#contact" },
 ];
 
 export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const closeMenu = () => setIsOpen(false);
+
   const headerClasses = isDark
     ? "sticky top-0 z-50 border-b border-white/10 bg-slate-950/75 text-slate-100 backdrop-blur-xl"
     : "sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 text-slate-900 backdrop-blur-xl";
 
-  const desktopLinkClass = ({ isActive }: { isActive: boolean }) =>
+  const desktopNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
       "relative text-sm transition-colors duration-200",
       isDark
@@ -28,11 +35,15 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
           ? "text-white"
           : "text-slate-400 hover:text-slate-200"
         : isActive
-          ? "text-slate-900"
-          : "text-slate-500 hover:text-slate-900",
+        ? "text-slate-900"
+        : "text-slate-500 hover:text-slate-900",
     ].join(" ");
 
-  const mobileLinkClass = ({ isActive }: { isActive: boolean }) =>
+  const desktopSectionLinkClass = isDark
+    ? "text-sm text-slate-400 transition-colors duration-200 hover:text-slate-200"
+    : "text-sm text-slate-500 transition-colors duration-200 hover:text-slate-900";
+
+  const mobileNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     [
       "rounded-xl px-4 py-3 text-sm transition",
       isDark
@@ -40,9 +51,13 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
           ? "bg-white text-slate-950"
           : "text-slate-300 hover:bg-white/10 hover:text-white"
         : isActive
-          ? "bg-slate-950 text-white"
-          : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
+        ? "bg-slate-950 text-white"
+        : "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
     ].join(" ");
+
+  const mobileSectionLinkClass = isDark
+    ? "rounded-xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
+    : "rounded-xl px-4 py-3 text-sm text-slate-700 transition hover:bg-slate-100 hover:text-slate-900";
 
   const ctaClass = isDark
     ? "inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:bg-slate-100"
@@ -50,18 +65,18 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
 
   return (
     <header className={headerClasses}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
         <Link
           to="/"
-          className="text-[15px] font-semibold tracking-[-0.02em] md:text-base"
-          onClick={() => setIsOpen(false)}
+          className="text-[15px] font-semibold tracking-[0.18em] md:text-base"
+          onClick={closeMenu}
         >
-          Inamullah Mohammad
+          INAMULLAH MOHAMMAD
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
-          {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} className={desktopLinkClass}>
+        <nav className="hidden items-center gap-5 md:flex">
+          {pageItems.map((item) => (
+            <NavLink key={item.to} to={item.to} className={desktopNavLinkClass}>
               {({ isActive }) => (
                 <span className="relative">
                   {item.label}
@@ -76,6 +91,17 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
               )}
             </NavLink>
           ))}
+
+          {sectionItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={desktopSectionLinkClass}
+              onClick={closeMenu}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -88,11 +114,19 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
                 : "inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-slate-50 text-slate-900 transition hover:bg-slate-100"
             }
           >
-            {isDark ? <Sun className="h-4.5 w-4.5" /> : <Moon className="h-4.5 w-4.5" />}
+            {isDark ? (
+              <Sun className="h-4.5 w-4.5" />
+            ) : (
+              <Moon className="h-4.5 w-4.5" />
+            )}
           </button>
 
-          <a href="/#contact" className={`${ctaClass} hidden sm:inline-flex`}>
-            Contact
+          <a
+            href="mailto:inamullahmohammadmdi.com"
+            className={`${ctaClass} hidden sm:inline-flex`}
+            onClick={closeMenu}
+          >
+            Let&apos;s Talk
           </a>
 
           <button
@@ -118,24 +152,35 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
               : "border-t border-slate-200 bg-white/95 backdrop-blur-xl md:hidden"
           }
         >
-          <nav className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-4">
-            {navItems.map((item) => (
+          <nav className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-4">
+            {pageItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
-                className={mobileLinkClass}
-                onClick={() => setIsOpen(false)}
+                className={mobileNavLinkClass}
+                onClick={closeMenu}
               >
                 {item.label}
               </NavLink>
             ))}
 
+            {sectionItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={mobileSectionLinkClass}
+                onClick={closeMenu}
+              >
+                {item.label}
+              </Link>
+            ))}
+
             <a
-              href="/#contact"
+              href="mailto:inamullahmohammadmdi.com"
               className={`${ctaClass} mt-2 w-full`}
-              onClick={() => setIsOpen(false)}
+              onClick={closeMenu}
             >
-              Contact
+              Let&apos;s Talk
             </a>
           </nav>
         </div>
