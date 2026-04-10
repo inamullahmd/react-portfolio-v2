@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, ChevronDown, Mail } from "lucide-react";
+import { ArrowRight, Sparkles, Mail } from "lucide-react";
 import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa6";
 
 type HomeProps = {
