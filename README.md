@@ -6,8 +6,6 @@ A modern personal portfolio website built to showcase my experience, projects, e
 
 **Live Demo:** [inamullahmd.com/](https://inamullahmd.com/)
 
-> Replace this with your deployed portfolio link once it is live.
-
 ## About
 
 This portfolio highlights my background in software development, data analytics, academic projects, and web development. It is designed to present my work in a clean, modern, and professional format.
