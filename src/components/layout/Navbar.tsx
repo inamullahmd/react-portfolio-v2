@@ -7,8 +7,6 @@ type NavbarProps = {
   toggleTheme: () => void;
 };
 
-const pageItems = [{ label: "Home", to: "/" }];
-
 const sectionItems = [
   { label: "About", to: "/#about", hash: "#about" },
   { label: "Experience", to: "/#experience", hash: "#experience" },
