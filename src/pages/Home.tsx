@@ -124,7 +124,19 @@ const skillGroups = [
   },
 ];
 
-const projects: ProjectItem[] = [
+const projects: ProjectItem[] = [  
+  {
+    title: "Kinetodesk.",
+    type: "Featured",
+    description:
+      "Developed a full-stack business dashboard that presents key operational data in a clean, centralized interface for tracking customers, employees, finances, and inventory activity.",
+    tech: "Laravel • React • Vite • TypeScript • MySQL • Tailwind CSS",
+    highlights: [
+      "Built a centralized dashboard to display business metrics and operational summaries in one place.",
+      "Integrated a Laravel REST API with a React frontend to fetch and present real-time application data.",
+      "Implemented date-based filtering and structured dashboard views to make financial and operational insights easier to review."
+    ]
+  },
   {
     title: "Gathering Place Parking Study",
     type: "Featured",
