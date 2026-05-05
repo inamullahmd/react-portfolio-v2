@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Mail } from "lucide-react";
 import { FaGithub, FaLinkedin, FaDiscord } from "react-icons/fa6";
+import { CgWebsite } from "react-icons/cg";
 
 type HomeProps = {
   isDark: boolean;
@@ -135,7 +136,9 @@ const projects: ProjectItem[] = [
       "Built a centralized dashboard to display business metrics and operational summaries in one place.",
       "Integrated a Laravel REST API with a React frontend to fetch and present real-time application data.",
       "Implemented date-based filtering and structured dashboard views to make financial and operational insights easier to review."
-    ]
+    ],
+    "githubUrl": "https://github.com/inamullahmd/estimation-of-obesity-levels",
+    "liveUrl": "https://kinetodesk.inamullahmd.com/"
   },
   {
     title: "Gathering Place Parking Study",
@@ -771,12 +774,17 @@ function ProjectCard({
 }) {
   const [expanded, setExpanded] = useState(false);
 
+  const hasLinks = Boolean(project.liveUrl || project.githubUrl);
+  const hasHighlights = Boolean(project.highlights && project.highlights.length > 0);
+  const hasTags = Boolean(project.tags && project.tags.length > 0);
+
   return (
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className={`h-full rounded-[1.25rem] border p-4 md:p-5 ${isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white"
-        }`}
+      className={`flex h-full flex-col rounded-[1.25rem] border p-4 md:p-5 ${
+        isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white"
+      }`}
     >
       <p
         className={
@@ -788,13 +796,14 @@ function ProjectCard({
         {project.type} Project
       </p>
 
-      <h3 className="mt-3 text-base font-semibold tracking-[-0.03em] md:text-[1.05rem]">
+      <h3 className="mt-3 min-h-[3.25rem] text-base font-semibold tracking-[-0.03em] md:text-[1.05rem] md:leading-6">
         {project.title}
       </h3>
 
       <p
-        className={`mt-3 text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
-          }`}
+        className={`mt-3 min-h-[7.5rem] text-sm leading-relaxed ${
+          isDark ? "text-slate-300" : "text-slate-700"
+        }`}
       >
         {project.description}
       </p>
@@ -802,98 +811,114 @@ function ProjectCard({
       <p
         className={
           isDark
-            ? "mt-4 text-[12px] leading-relaxed text-slate-400"
-            : "mt-4 text-[12px] leading-relaxed text-slate-500"
+            ? "mt-4 min-h-[2.75rem] text-[12px] leading-relaxed text-slate-400"
+            : "mt-4 min-h-[2.75rem] text-[12px] leading-relaxed text-slate-500"
         }
       >
         <span className="font-medium">Tech:</span> {project.tech}
       </p>
 
-      {project.tags && project.tags.length > 0 ? (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className={
-                isDark
-                  ? "rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-400"
-                  : "rounded-full border border-slate-200 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-500"
-              }
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      ) : null}
+      <div className="mt-4 min-h-[2rem]">
+        {hasTags ? (
+          <div className="flex flex-wrap gap-2">
+            {project?.tags?.map((tag) => (
+              <span
+                key={tag}
+                className={
+                  isDark
+                    ? "rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-400"
+                    : "rounded-full border border-slate-200 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-slate-500"
+                }
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
+      </div>
 
-      {(project.liveUrl || project.githubUrl) ? (
-        <div className="mt-4 flex flex-wrap gap-3">
-          {project.liveUrl ? (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noreferrer"
+      <div className="mt-4 min-h-[2.5rem]">
+        {hasLinks ? (
+          <div className="flex flex-wrap gap-3">
+            {project.liveUrl ? (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                  isDark
+                    ? "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                }`}
+              >
+                <CgWebsite className="h-3.5 w-3.5" />
+                Live Website
+              </a>
+            ) : null}
+
+            {project.githubUrl ? (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                  isDark
+                    ? "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                }`}
+              >
+                <FaGithub className="h-3.5 w-3.5" />
+                GitHub Repo
+              </a>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+
+      {hasHighlights ? (
+        <div
+          className={`mt-auto pt-4 ${
+            isDark ? "border-white/10" : "border-slate-200"
+          }`}
+        >
+          <div className={`border-t pt-4 ${isDark ? "border-white/10" : "border-slate-200"}`}>
+            <button
+              type="button"
+              onClick={() => setExpanded((prev) => !prev)}
               className={
                 isDark
-                  ? "text-xs font-medium text-slate-200 transition hover:text-white"
+                  ? "text-xs font-medium text-slate-300 transition hover:text-white"
                   : "text-xs font-medium text-slate-700 transition hover:text-slate-950"
               }
             >
-              Live Website
-            </a>
-          ) : null}
+              {expanded ? "Hide highlights" : "View highlights"}
+            </button>
 
-          {project.githubUrl ? (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noreferrer"
-              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${isDark
-                ? "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:text-white"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950"
-                }`}
-            >
-              <FaGithub className="h-3.5 w-3.5" />
-              GitHub Repo
-            </a>
-          ) : null}
-        </div>
-      ) : null}
-
-      {project.highlights && project.highlights.length > 0 ? (
-        <div className={`mt-4 border-t pt-4 ${isDark ? "border-white/10" : "border-slate-200"}`}>
-          <button
-            type="button"
-            onClick={() => setExpanded((prev) => !prev)}
-            className={
-              isDark
-                ? "text-xs font-medium text-slate-300 transition hover:text-white"
-                : "text-xs font-medium text-slate-700 transition hover:text-slate-950"
-            }
-          >
-            {expanded ? "Hide highlights" : "View highlights"}
-          </button>
-
-          {expanded ? (
-            <div className="mt-3 space-y-2.5">
-              {project.highlights.map((point) => (
-                <div key={point} className="flex gap-2.5">
-                  <span
-                    className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? "bg-slate-400" : "bg-slate-500"
+            {expanded ? (
+              <div className="mt-3 space-y-2.5">
+                {project.highlights?.map((point) => (
+                  <div key={point} className="flex gap-2.5">
+                    <span
+                      className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
+                        isDark ? "bg-slate-400" : "bg-slate-500"
                       }`}
-                  />
-                  <p
-                    className={`text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
+                    />
+                    <p
+                      className={`text-sm leading-relaxed ${
+                        isDark ? "text-slate-300" : "text-slate-700"
                       }`}
-                  >
-                    {point}
-                  </p>
-                </div>
-              ))}
-            </div>
-          ) : null}
+                    >
+                      {point}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="mt-auto pt-4" />
+      )}
     </motion.article>
   );
 }
@@ -1218,82 +1243,88 @@ export default function Home({ isDark }: HomeProps) {
       </section>
 
       <section id="projects" className="px-6 py-12 md:py-14">
-        <div className="mx-auto max-w-[1180px]">
-          <SectionIntro
-            eyebrow="Selected Projects"
-            title="Some things I’ve built."
-            isDark={isDark}
-          />
+  <div className="mx-auto max-w-[1180px]">
+    <SectionIntro
+      eyebrow="Selected Projects"
+      title="Some things I’ve built."
+      isDark={isDark}
+    />
 
-          <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {paginatedProjects.map((project, index) => (
-              <motion.div
-                key={`${project.title}-${projectPage}`}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: index * 0.04 }}
-              >
-                <ProjectCard project={project} isDark={isDark} />
-              </motion.div>
-            ))}
-          </div>
+    <div className="mt-8 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {paginatedProjects.map((project, index) => (
+        <motion.div
+          key={`${project.title}-${projectPage}`}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.45, delay: index * 0.04 }}
+          className="h-full"
+        >
+          <ProjectCard project={project} isDark={isDark} />
+        </motion.div>
+      ))}
+    </div>
 
-          {totalProjectPages > 1 ? (
-            <div className="mt-8 flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setProjectPage((prev) => Math.max(prev - 1, 1))}
-                disabled={projectPage === 1}
-                className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${projectPage === 1
-                  ? isDark
-                    ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
-                    : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
-                  : isDark
-                    ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
-                    : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
-                  }`}
-              >
-                Previous
-              </button>
+    {totalProjectPages > 1 ? (
+      <div className="mt-8 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setProjectPage((prev) => Math.max(prev - 1, 1))}
+          disabled={projectPage === 1}
+          className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${
+            projectPage === 1
+              ? isDark
+                ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
+                : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
+              : isDark
+                ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
+                : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+          }`}
+        >
+          Previous
+        </button>
 
-              {Array.from({ length: totalProjectPages }, (_, i) => i + 1).map((pageNumber) => (
-                <button
-                  key={pageNumber}
-                  type="button"
-                  onClick={() => setProjectPage(pageNumber)}
-                  className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-medium transition ${projectPage === pageNumber
-                    ? isDark
-                      ? "border border-white/10 bg-white text-slate-950"
-                      : "border border-slate-900 bg-slate-900 text-white"
-                    : isDark
-                      ? "border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08]"
-                      : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                    }`}
-                >
-                  {pageNumber}
-                </button>
-              ))}
+        {Array.from({ length: totalProjectPages }, (_, i) => i + 1).map((pageNumber) => (
+          <button
+            key={pageNumber}
+            type="button"
+            onClick={() => setProjectPage(pageNumber)}
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-medium transition ${
+              projectPage === pageNumber
+                ? isDark
+                  ? "border border-white/10 bg-white text-slate-950"
+                  : "border border-slate-900 bg-slate-900 text-white"
+                : isDark
+                  ? "border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08]"
+                  : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+            }`}
+          >
+            {pageNumber}
+          </button>
+        ))}
 
-              <button
-                type="button"
-                onClick={() => setProjectPage((prev) => Math.min(prev + 1, totalProjectPages))}
-                disabled={projectPage === totalProjectPages}
-                className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${projectPage === totalProjectPages
-                  ? isDark
-                    ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
-                    : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
-                  : isDark
-                    ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
-                    : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
-                  }`}
-              >
-                Next
-              </button>
-            </div>
-          ) : null}
-        </div>
-      </section>
+        <button
+          type="button"
+          onClick={() =>
+            setProjectPage((prev) => Math.min(prev + 1, totalProjectPages))
+          }
+          disabled={projectPage === totalProjectPages}
+          className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${
+            projectPage === totalProjectPages
+              ? isDark
+                ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
+                : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
+              : isDark
+                ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
+                : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+          }`}
+        >
+          Next
+        </button>
+      </div>
+    ) : null}
+  </div>
+</section>
 
       <section id="education" className="px-6 py-12 md:py-14">
         <div className="mx-auto max-w-[1180px]">
