@@ -125,7 +125,22 @@ const skillGroups = [
   },
 ];
 
-const projects: ProjectItem[] = [  
+const projects: ProjectItem[] = [
+  {
+    title: "Cleanframe.",
+    type: "Featured",
+    description:
+      "Developed a browser-first CSV workspace for profiling messy datasets, correcting schema issues, cleaning missing values, building charts, and exporting packaged data artifacts.",
+    tech: "Next.js • TypeScript • Tailwind CSS • Zustand • shadcn/ui • Apache ECharts",
+    highlights: [
+      "Built a schema-first CSV workbench with column profiling, type detection, missing-value detection, outlier indicators, and data-quality summaries.",
+      "Implemented an interactive data grid with formatted/raw value toggles, column visibility controls, text-size adjustment, pagination, missing-value highlighting, and outlier highlighting.",
+      "Migrated charting from Recharts to Apache ECharts and added configurable bar, line, area, pie, scatter, and histogram charts with PNG export and save-to-package support.",
+      "Added local browser session persistence, workspace history, settings-driven parsing behavior, custom delimiters, configurable empty-value tokens, and exportable ZIP packages."
+    ],
+    githubUrl: "https://github.com/inamullahmd/cleanframe",
+    liveUrl: "https://cleanframe.inamullahmd.com/"
+  },
   {
     title: "Kinetodesk.",
     type: "Featured",
@@ -401,16 +416,14 @@ function TypingTerminal({ isDark }: { isDark: boolean }) {
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[1.35rem] border shadow-[0_24px_80px_rgba(0,0,0,0.22)] ${
-        isDark
+      className={`relative overflow-hidden rounded-[1.35rem] border shadow-[0_24px_80px_rgba(0,0,0,0.22)] ${isDark
           ? "border-white/10 bg-[#0b1020]/90 backdrop-blur-xl"
           : "border-slate-300/70 bg-white/90 backdrop-blur-xl"
-      }`}
+        }`}
     >
       <div
-        className={`flex items-center gap-2 border-b px-4 py-3 ${
-          isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-slate-50/80"
-        }`}
+        className={`flex items-center gap-2 border-b px-4 py-3 ${isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-slate-50/80"
+          }`}
       >
         <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
@@ -419,11 +432,10 @@ function TypingTerminal({ isDark }: { isDark: boolean }) {
 
       <div className="relative px-5 py-5 font-mono text-[13px] leading-7 md:text-[14px]">
         <motion.div
-          className={`absolute inset-y-0 -left-20 w-20 skew-x-[-22deg] ${
-            isDark
+          className={`absolute inset-y-0 -left-20 w-20 skew-x-[-22deg] ${isDark
               ? "bg-gradient-to-r from-transparent via-white/8 to-transparent"
               : "bg-gradient-to-r from-transparent via-white/70 to-transparent"
-          }`}
+            }`}
           animate={{ x: ["0%", "620%"] }}
           transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -437,9 +449,8 @@ function TypingTerminal({ isDark }: { isDark: boolean }) {
             </span>
 
             <motion.span
-              className={`inline-block h-[18px] w-[8px] ${
-                isDark ? "bg-violet-400/90" : "bg-violet-600/90"
-              }`}
+              className={`inline-block h-[18px] w-[8px] ${isDark ? "bg-violet-400/90" : "bg-violet-600/90"
+                }`}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -479,24 +490,21 @@ function HeroVisual({ isDark }: HeroVisualProps) {
   return (
     <div className="relative mx-auto h-[360px] w-full max-w-[560px] lg:h-[460px]">
       <div
-        className={`absolute inset-0 overflow-hidden rounded-[2rem] border ${
-          isDark
+        className={`absolute inset-0 overflow-hidden rounded-[2rem] border ${isDark
             ? "border-white/8 bg-[radial-gradient(circle_at_35%_18%,rgba(168,85,247,0.14),transparent_28%),radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))]"
             : "border-slate-300/70 bg-[radial-gradient(circle_at_35%_18%,rgba(168,85,247,0.10),transparent_28%),radial-gradient(circle_at_75%_30%,rgba(56,189,248,0.10),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.9),rgba(248,250,252,0.92))]"
-        }`}
+          }`}
       >
         <div
-          className={`absolute inset-0 ${
-            isDark
+          className={`absolute inset-0 ${isDark
               ? "bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)]"
               : "bg-[linear-gradient(rgba(148,163,184,0.13)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.13)_1px,transparent_1px)]"
-          } bg-[size:28px_28px] opacity-40`}
+            } bg-[size:28px_28px] opacity-40`}
         />
 
         <motion.div
-          className={`absolute -left-8 top-16 h-24 w-64 rounded-full blur-3xl ${
-            isDark ? "bg-violet-500/14" : "bg-violet-400/10"
-          }`}
+          className={`absolute -left-8 top-16 h-24 w-64 rounded-full blur-3xl ${isDark ? "bg-violet-500/14" : "bg-violet-400/10"
+            }`}
           animate={{
             x: [0, 24, -10, 0],
             y: [0, -12, 8, 0],
@@ -505,9 +513,8 @@ function HeroVisual({ isDark }: HeroVisualProps) {
         />
 
         <motion.div
-          className={`absolute right-0 top-10 h-28 w-72 rounded-full blur-3xl ${
-            isDark ? "bg-sky-500/12" : "bg-sky-400/9"
-          }`}
+          className={`absolute right-0 top-10 h-28 w-72 rounded-full blur-3xl ${isDark ? "bg-sky-500/12" : "bg-sky-400/9"
+            }`}
           animate={{
             x: [0, -20, 12, 0],
             y: [0, 10, -8, 0],
@@ -540,23 +547,20 @@ function HeroVisual({ isDark }: HeroVisualProps) {
         </svg>
 
         <div
-          className={`absolute left-10 top-8 text-[10px] font-mono ${
-            isDark ? "text-white/5" : "text-slate-500/10"
-          }`}
+          className={`absolute left-10 top-8 text-[10px] font-mono ${isDark ? "text-white/5" : "text-slate-500/10"
+            }`}
         >
           const state = useState(null)
         </div>
         <div
-          className={`absolute right-12 top-12 text-[10px] font-mono ${
-            isDark ? "text-white/5" : "text-slate-500/10"
-          }`}
+          className={`absolute right-12 top-12 text-[10px] font-mono ${isDark ? "text-white/5" : "text-slate-500/10"
+            }`}
         >
           void main() {"{}"}
         </div>
         <div
-          className={`absolute left-16 bottom-20 text-[10px] font-mono ${
-            isDark ? "text-white/5" : "text-slate-500/10"
-          }`}
+          className={`absolute left-16 bottom-20 text-[10px] font-mono ${isDark ? "text-white/5" : "text-slate-500/10"
+            }`}
         >
           docker-compose up -d
         </div>
@@ -782,9 +786,8 @@ function ProjectCard({
     <motion.article
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className={`flex h-full flex-col rounded-[1.25rem] border p-4 md:p-5 ${
-        isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white"
-      }`}
+      className={`flex h-full flex-col rounded-[1.25rem] border p-4 md:p-5 ${isDark ? "border-white/10 bg-white/[0.03]" : "border-slate-200 bg-white"
+        }`}
     >
       <p
         className={
@@ -801,9 +804,8 @@ function ProjectCard({
       </h3>
 
       <p
-        className={`mt-3 min-h-[7.5rem] text-sm leading-relaxed ${
-          isDark ? "text-slate-300" : "text-slate-700"
-        }`}
+        className={`mt-3 min-h-[7.5rem] text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
+          }`}
       >
         {project.description}
       </p>
@@ -845,11 +847,10 @@ function ProjectCard({
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                  isDark
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${isDark
                     ? "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:text-white"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950"
-                }`}
+                  }`}
               >
                 <CgWebsite className="h-3.5 w-3.5" />
                 Live Website
@@ -861,11 +862,10 @@ function ProjectCard({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                  isDark
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${isDark
                     ? "border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:text-white"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950"
-                }`}
+                  }`}
               >
                 <FaGithub className="h-3.5 w-3.5" />
                 GitHub Repo
@@ -877,9 +877,8 @@ function ProjectCard({
 
       {hasHighlights ? (
         <div
-          className={`mt-auto pt-4 ${
-            isDark ? "border-white/10" : "border-slate-200"
-          }`}
+          className={`mt-auto pt-4 ${isDark ? "border-white/10" : "border-slate-200"
+            }`}
         >
           <div className={`border-t pt-4 ${isDark ? "border-white/10" : "border-slate-200"}`}>
             <button
@@ -899,14 +898,12 @@ function ProjectCard({
                 {project.highlights?.map((point) => (
                   <div key={point} className="flex gap-2.5">
                     <span
-                      className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
-                        isDark ? "bg-slate-400" : "bg-slate-500"
-                      }`}
+                      className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${isDark ? "bg-slate-400" : "bg-slate-500"
+                        }`}
                     />
                     <p
-                      className={`text-sm leading-relaxed ${
-                        isDark ? "text-slate-300" : "text-slate-700"
-                      }`}
+                      className={`text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"
+                        }`}
                     >
                       {point}
                     </p>
@@ -1243,88 +1240,85 @@ export default function Home({ isDark }: HomeProps) {
       </section>
 
       <section id="projects" className="px-6 py-12 md:py-14">
-  <div className="mx-auto max-w-[1180px]">
-    <SectionIntro
-      eyebrow="Selected Projects"
-      title="Some things I’ve built."
-      isDark={isDark}
-    />
+        <div className="mx-auto max-w-[1180px]">
+          <SectionIntro
+            eyebrow="Selected Projects"
+            title="Some things I’ve built."
+            isDark={isDark}
+          />
 
-    <div className="mt-8 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {paginatedProjects.map((project, index) => (
-        <motion.div
-          key={`${project.title}-${projectPage}`}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.45, delay: index * 0.04 }}
-          className="h-full"
-        >
-          <ProjectCard project={project} isDark={isDark} />
-        </motion.div>
-      ))}
-    </div>
+          <div className="mt-8 grid items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {paginatedProjects.map((project, index) => (
+              <motion.div
+                key={`${project.title}-${projectPage}`}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.45, delay: index * 0.04 }}
+                className="h-full"
+              >
+                <ProjectCard project={project} isDark={isDark} />
+              </motion.div>
+            ))}
+          </div>
 
-    {totalProjectPages > 1 ? (
-      <div className="mt-8 flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setProjectPage((prev) => Math.max(prev - 1, 1))}
-          disabled={projectPage === 1}
-          className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${
-            projectPage === 1
-              ? isDark
-                ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
-                : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
-              : isDark
-                ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
-                : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          Previous
-        </button>
+          {totalProjectPages > 1 ? (
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setProjectPage((prev) => Math.max(prev - 1, 1))}
+                disabled={projectPage === 1}
+                className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${projectPage === 1
+                    ? isDark
+                      ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
+                      : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
+                    : isDark
+                      ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
+                      : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  }`}
+              >
+                Previous
+              </button>
 
-        {Array.from({ length: totalProjectPages }, (_, i) => i + 1).map((pageNumber) => (
-          <button
-            key={pageNumber}
-            type="button"
-            onClick={() => setProjectPage(pageNumber)}
-            className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-medium transition ${
-              projectPage === pageNumber
-                ? isDark
-                  ? "border border-white/10 bg-white text-slate-950"
-                  : "border border-slate-900 bg-slate-900 text-white"
-                : isDark
-                  ? "border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08]"
-                  : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
-          >
-            {pageNumber}
-          </button>
-        ))}
+              {Array.from({ length: totalProjectPages }, (_, i) => i + 1).map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  type="button"
+                  onClick={() => setProjectPage(pageNumber)}
+                  className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-xs font-medium transition ${projectPage === pageNumber
+                      ? isDark
+                        ? "border border-white/10 bg-white text-slate-950"
+                        : "border border-slate-900 bg-slate-900 text-white"
+                      : isDark
+                        ? "border border-white/10 bg-white/[0.04] text-slate-300 hover:bg-white/[0.08]"
+                        : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    }`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
 
-        <button
-          type="button"
-          onClick={() =>
-            setProjectPage((prev) => Math.min(prev + 1, totalProjectPages))
-          }
-          disabled={projectPage === totalProjectPages}
-          className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${
-            projectPage === totalProjectPages
-              ? isDark
-                ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
-                : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
-              : isDark
-                ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
-                : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
-          }`}
-        >
-          Next
-        </button>
-      </div>
-    ) : null}
-  </div>
-</section>
+              <button
+                type="button"
+                onClick={() =>
+                  setProjectPage((prev) => Math.min(prev + 1, totalProjectPages))
+                }
+                disabled={projectPage === totalProjectPages}
+                className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-medium transition ${projectPage === totalProjectPages
+                    ? isDark
+                      ? "cursor-not-allowed border border-white/10 bg-white/[0.03] text-slate-500"
+                      : "cursor-not-allowed border border-slate-200 bg-slate-50 text-slate-400"
+                    : isDark
+                      ? "border border-white/10 bg-white/[0.04] text-slate-100 hover:bg-white/[0.08]"
+                      : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50"
+                  }`}
+              >
+                Next
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </section>
 
       <section id="education" className="px-6 py-12 md:py-14">
         <div className="mx-auto max-w-[1180px]">
@@ -1374,8 +1368,8 @@ export default function Home({ isDark }: HomeProps) {
         <div className="mx-auto max-w-[1180px]">
           <div
             className={`rounded-[1.5rem] border px-5 py-8 md:px-8 md:py-10 ${isDark
-                ? "border-white/10 bg-white/[0.03]"
-                : "border-slate-200 bg-white"
+              ? "border-white/10 bg-white/[0.03]"
+              : "border-slate-200 bg-white"
               }`}
           >
             <div className="max-w-2xl">
